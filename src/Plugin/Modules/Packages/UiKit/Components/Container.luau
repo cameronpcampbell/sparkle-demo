@@ -71,7 +71,7 @@ local function ContainerHeader(scope: Component.Scope, isExpandedState: Fusion.V
 
       TextLabel {
         Scope = scope,
-        Text = "Header Title",
+        Text = "Container With Some Code",
         Focus = "Title" :: "Title",
         Weight = Enum.FontWeight.SemiBold,
         Size = UDim2.fromScale(0, 0),

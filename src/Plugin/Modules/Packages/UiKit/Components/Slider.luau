@@ -26,7 +26,7 @@ local Fusion = require(Packages.Fusion)
 --> Types ---------------------------------------------------------------------------------------------
 type SliderProps = {
   Width: Fusion.UsedAs<UDim>?,
-  Value: Fusion.UsedAs<number>?,
+  ProgressPercent: Fusion.UsedAs<number>?,
   Step: Fusion.UsedAs<number>?,
 }
 -------------------------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ local DraggerSize = 14
 end]]
 
 local function MoveDragger(
-  sliderValue: Fusion.Value<number>, sliderAbsSizeState: Fusion.Value<Vector2>,
+  progressPercentState: Fusion.Value<number>, sliderAbsSizeState: Fusion.Value<Vector2>,
   sliderAbsPosState: Fusion.Value<Vector2>, mousePosXState: Fusion.Value<number>
 )
   return function(x: number?)
@@ -78,7 +78,7 @@ local function MoveDragger(
       0, 1
     )
 
-    sliderValue:set(relPosX)
+    progressPercentState:set(relPosX)
   end
 end
 
@@ -106,9 +106,9 @@ end
 
 
 return Component(function(scope, props: SliderProps)
-  local width, sliderValueState, _stepSize =
+  local width, progressPercentState, _stepSize =
     TableTake(props, "Width", UDim.new(1,0)) :: Fusion.UsedAs<UDim>,
-    ForceToState(scope, TableTake(props, "Value", 0)) :: Fusion.Value<number>,
+    ForceToState(scope, TableTake(props, "ProgressPercent", 0)) :: Fusion.Value<number>,
     TableTake(props, "StepSize") :: Fusion.UsedAs<number>
 
   local sliderRef = (scope:Value(nil) :: any) :: Fusion.Value<Instance>
@@ -117,7 +117,7 @@ return Component(function(scope, props: SliderProps)
 
   local mousePosXState = scope:Value(0)
 
-  local moveDragger = MoveDragger(sliderValueState, sliderAbsSizeState, sliderAbsPosState, mousePosXState)
+  local moveDragger = MoveDragger(progressPercentState, sliderAbsSizeState, sliderAbsPosState, mousePosXState)
 
   return sliderRef:set(
     scope:New "ImageButton" ({
@@ -143,7 +143,7 @@ return Component(function(scope, props: SliderProps)
   
           [Children] = Squircle {
             Scope = scope,
-            Size = ComputeUDim2FromScale(scope, sliderValueState, 1),
+            Size = ComputeUDim2FromScale(scope, progressPercentState, 1),
             BackgroundColor3 = ThemeHandlerGet("Accent/Primary"),
             Image = "rbxassetid://104271355998011",
             SliceCenter = Rect.new(8,4,8,4),
@@ -158,7 +158,7 @@ return Component(function(scope, props: SliderProps)
 
           [Children] = scope:New "ImageLabel" {
             Size = UDim2.fromOffset(DraggerSize, DraggerSize),
-            Position = ComputeUDim2FromScale(scope, sliderValueState, 0),
+            Position = ComputeUDim2FromScale(scope, progressPercentState, 0),
             Image = "rbxassetid://114187647106547",
             BackgroundTransparency = 1,
             ImageColor3 = ThemeHandlerGet("Accent/Primary"),
