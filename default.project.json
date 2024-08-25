@@ -1,0 +1,11 @@
+{
+  "name": "ui_kit",
+  "tree": {
+    "$className": "DataModel",
+
+    "ServerStorage": {
+      "$path": "src"
+    }
+
+  }
+}
